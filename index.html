@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style type="text/css">
+    body {
+      background: grey;
+    }
+  </style>
+</head>
+<body ng-app="demoApp">
+
+<div ng-controller="demoController">
+  {{hellos}}
+</div>
+
+
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+
+  <script>
+    (function(){
+
+      angular
+        .module('demoApp', [])
+        .controller('demoController', demoController)
+        .service('helloWorldFromServise', helloWorldFromServise)
+        .factory('helloWorldFromFactory', helloWorldFromFactory)
+        .provider('helloWorldFromProvider', helloWorldFromProvider)
+        .config(configForProvider);
+
+        function helloWorldFromServise() {
+          this.sayHello = function() {
+            return 'Hello World'
+          }
+        }
+
+        function helloWorldFromFactory() {
+          return {
+            sayHello: function() {
+              return 'Hello World'
+            }
+          }
+        }
+
+        function helloWorldFromProvider() {
+          var hello;
+
+          return {
+            setHello: function(value) {
+              hello = value
+            },
+            $get: function() {
+              return {
+                sayHello: function() {
+                  return hello + ' ' + 'World'
+                }
+              }
+            }
+          }
+        };
+        function configForProvider(helloWorldFromProviderProvider) {
+          helloWorldFromProviderProvider.setHello('Hello');
+        }
+
+        function demoController($scope, helloWorldFromProvider, helloWorldFromFactory, helloWorldFromServise) {
+          $scope.hellos = [
+          helloWorldFromServise.sayHello(),
+          helloWorldFromFactory.sayHello(),
+          helloWorldFromProvider.sayHello()];
+        }
+
+      // var app = angular.module('demoApp', []);
+
+      // app.provider('helloWorldFromProvider', function(){
+      //   var hello;
+      //   return {
+      //     setHello: function(value) {
+      //       hello = value
+      //     },
+      //     $get: function() {
+      //       return {
+      //         sayHello: function() {
+      //           return hello + ' ' + 'World'
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
+
+      // app.config(function(helloWorldFromProviderProvider) {
+      //   helloWorldFromProviderProvider.setHello('Hello');
+      // })
+      // app.controller('demoController',function($scope, helloWorldFromProvider) {
+      //   $scope.hellos = helloWorldFromProvider.sayHello();
+      // })
+
+
+  })();
+  </script>
+</body>
+</html>
